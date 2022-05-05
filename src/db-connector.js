@@ -75,8 +75,7 @@ export const proccessItemsData = (html) => {
  * @param {*} items raw product data
  */
 export const saveItems = async (items) => {
-  const formattedItems = proccessItemsData(items);
-  for (let item of formattedItems) {
+  for (let item of items) {
     let itemAlreadyExists = await DB.findOne({ where: { upc: item.upc } });
     if (itemAlreadyExists && itemAlreadyExists.price !== item.price) {
       /**

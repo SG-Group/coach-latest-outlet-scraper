@@ -14,7 +14,7 @@ const startScraping = async () => {
         flag = false;
         break;
       } else {
-        await saveItems(items);
+        await saveItems(parsedItems);
         pageNumber++;
       }
     }
