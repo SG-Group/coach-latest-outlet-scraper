@@ -1,4 +1,4 @@
-# coach-outlet-latest
+# coach-latest-outlet
 
 Script to constantly run and scrape the What's New section of Coach Outlet for new items and price changes and persist the data to a locally ran database.
 
