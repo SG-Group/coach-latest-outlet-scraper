@@ -8,12 +8,12 @@ const sequelize = new Sequelize({
 });
 
 const DB = sequelize.define("Items", {
-  upc: DataTypes.STRING,
+  sku: DataTypes.STRING,
   name: DataTypes.STRING,
   brand: DataTypes.STRING,
   price: DataTypes.REAL,
   lastUpdatedPrice: DataTypes.REAL,
-  originalPrice: DataTypes.REAL,
+  oldPrice: DataTypes.REAL,
   discount: DataTypes.NUMBER,
   url: DataTypes.STRING,
   img: DataTypes.STRING,
@@ -45,11 +45,11 @@ export const proccessItemsData = (html) => {
       try {
         const json = JSON.parse($(element).attr("data-gtmitemdata"));
         products.push({
-          upc: json.item_id,
+          sku: json.item_id,
           name: json.item_name,
           brand: json.item_brand,
           price: parseFloat(json.price),
-          originalPrice: parseFloat(json.was_price),
+          oldPrice: parseFloat(json.was_price),
           url: `https://www.coachoutlet.com/search?q=${json.item_id}&search-button=&lang=en_US`,
           img: `https://images.coach.com${$(element)
             .find("picture")
@@ -76,7 +76,7 @@ export const proccessItemsData = (html) => {
  */
 export const saveItems = async (items) => {
   for (let item of items) {
-    let itemAlreadyExists = await DB.findOne({ where: { upc: item.upc } });
+    let itemAlreadyExists = await DB.findOne({ where: { sku: item.sku } });
     if (itemAlreadyExists && itemAlreadyExists.price !== item.price) {
       /**
        * Updates item if it already exists in db and
@@ -84,12 +84,12 @@ export const saveItems = async (items) => {
        */
       await itemAlreadyExists
         .update({
-          upc: item.upc,
+          sku: item.sku,
           name: item.name,
           brand: item.brand,
           price: item.price,
           lastUpdatedPrice: itemAlreadyExists.price,
-          originalPrice: item.originalPrice,
+          oldPrice: item.oldPrice,
           discount: item.discount,
           url: item.url,
           img: item.img,
